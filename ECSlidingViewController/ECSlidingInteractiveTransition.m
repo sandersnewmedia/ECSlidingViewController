@@ -64,18 +64,20 @@
 - (void)updateTopViewHorizontalCenterWithRecognizer:(UIPanGestureRecognizer *)recognizer {
     CGFloat translationX  = [recognizer translationInView:self.slidingViewController.view].x;
     CGFloat velocityX     = [recognizer velocityInView:self.slidingViewController.view].x;
+    CGFloat velocityY     = [recognizer velocityInView:self.slidingViewController.view].y;
 
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan: {
             BOOL isMovingRight = velocityX > 0;
-
+            BOOL isMovingUp = velocityY > 0;
+            BOOL isMovingDown = velocityY < 0;
             if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionCentered && isMovingRight) {
                 [self.slidingViewController anchorTopViewToRightAnimated:YES];
             } else if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionCentered && !isMovingRight) {
                 [self.slidingViewController anchorTopViewToLeftAnimated:YES];
             } else if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredLeft) {
                 [self.slidingViewController resetTopViewAnimated:YES];
-            } else if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight && !isMovingRight) {
+            } else if (self.slidingViewController.currentTopViewPosition == ECSlidingViewControllerTopViewPositionAnchoredRight && !isMovingRight && !isMovingDown && !isMovingUp) {
                 [self.slidingViewController resetTopViewAnimated:YES];
             }
             
